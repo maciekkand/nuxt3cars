@@ -2,6 +2,24 @@ import axios from 'axios'
 
 const BASE_URL = 'http://localhost:4000'
 
+export function fetchBrandNames() {
+  return axios.get(`${BASE_URL}/brands`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .catch((error) => console.error(error));
+}
+
+export function fetchColors() {
+  return axios.get(`${BASE_URL}/colors`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .catch((error) => console.error(error));
+}
+
 export function fetchRows({start=0, limit=10, sort='id', order='asc'}) {
   return axios.get(`${BASE_URL}/rows?_start=${start}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
     headers: {

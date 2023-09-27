@@ -1,8 +1,41 @@
 {
+  "brands": [
+    "audi",
+    "bmw",
+    "chrysler",
+    "hyundai",
+    "honda",
+    "jeep",
+    "mercedes",
+    "nissan",
+    "opel",
+    "peugeot",
+    "renault",
+    "rover",
+    "skoda",
+    "tesla",
+    "toyota",
+    "volkswagen"
+  ],
+  "colors": [
+    "aqua",
+    "black",
+    "gray",
+    "green",
+    "orange",
+    "pink",
+    "purple",
+    "red",
+    "silver",
+    "teal",
+    "violet",
+    "white",
+    "yellow"
+  ],
   "rows": [
     {
       "id": 1,
-      "brand": "toyota",
+      "brand": "volkswagen",
       "year": 2006,
       "color": "white",
       "price": 77306
@@ -16,7 +49,7 @@
     },
     {
       "id": 3,
-      "brand": "bmw",
+      "brand": "opel",
       "year": 1993,
       "color": "orange",
       "price": 23184
@@ -128,7 +161,7 @@
     },
     {
       "id": 19,
-      "brand": "bmw",
+      "brand": "volkswagen",
       "year": 2005,
       "color": "pink",
       "price": 97544
@@ -310,7 +343,7 @@
     },
     {
       "id": 45,
-      "brand": "hyundai",
+      "brand": "volkswagen",
       "year": 2006,
       "color": "purple",
       "price": 85413
@@ -443,7 +476,7 @@
     },
     {
       "id": 64,
-      "brand": "skoda",
+      "brand": "volkswagen",
       "year": 1996,
       "color": "violet",
       "price": 64726
@@ -569,7 +602,7 @@
     },
     {
       "id": 82,
-      "brand": "opel",
+      "brand": "volkswagen",
       "year": 2009,
       "color": "gray",
       "price": 20106
@@ -877,7 +910,7 @@
     },
     {
       "id": 126,
-      "brand": "chrysler",
+      "brand": "volkswagen",
       "year": 2009,
       "color": "aqua",
       "price": 24182
@@ -1122,7 +1155,7 @@
     },
     {
       "id": 161,
-      "brand": "renault",
+      "brand": "volkswagen",
       "year": 2008,
       "color": "yellow",
       "price": 12936
@@ -1178,7 +1211,7 @@
     },
     {
       "id": 169,
-      "brand": "tesla",
+      "brand": "volkswagen",
       "year": 2008,
       "color": "purple",
       "price": 24101
@@ -6999,6 +7032,13 @@
       "year": 2006,
       "color": "gray",
       "price": 81096
+    },
+    {
+      "brand": "audi",
+      "year": "1900",
+      "color": "aqua",
+      "price": "100",
+      "id": 1001
     }
   ]
 }

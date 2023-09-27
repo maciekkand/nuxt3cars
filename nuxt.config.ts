@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@pinia/nuxt',
+    '@nuxt/devtools'
   ],
   pages: true,
   css: ['~/assets/css/main.css'],
@@ -24,5 +25,6 @@ export default defineNuxtConfig({
         lang: "en",
       },
     }
-  }
+  },
+  ssr: false
 })

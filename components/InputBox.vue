@@ -2,7 +2,7 @@
   <div>
       <input
         :type="inputBoxType"
-        :class="boxWidth"
+        :class="boxSizes"
         :placeholder="`${inputPlaceholder}`"
         maxlength="20"
         :min="minNumber"
@@ -11,7 +11,6 @@
         :value="value"
         @input="handleInput"
       />
-
   </div>
 </template>
 
@@ -29,8 +28,8 @@ const props = defineProps({
   stepNumber: Number
 })
 
-const boxWidth = computed(() => {
-  const fixedStyles = 'block mt-1 border-1 rounded-lg form-input'
+const boxSizes = computed(() => {
+  const fixedStyles = 'block mt-1 border-1 rounded-lg form-input text-slate-600'
   return props.stringInput ? `${fixedStyles} w-[170px]` : `${fixedStyles} w-[95px]`
 })
 

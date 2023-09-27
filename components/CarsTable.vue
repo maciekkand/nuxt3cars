@@ -19,36 +19,54 @@
         alt="delete-row-confirmation-modal"
         :carId="carId"
         :carBrand="carBrand"
-        :carYear="carYear"
+        :carYear="String(carYear)"
         :carColor="carColor"
-        :carPrice="carPrice"
+        :carPrice="String(carPrice)"
       />
 
-      <div class="leading-[3rem] grid w-full grid-cols-9 mt-12 text-xl bg-neutral-300 cursor-pointer">
+      <div
+        class="leading-[3rem] grid w-full grid-cols-9 mt-12 text-xl bg-neutral-300"
+        :class="{ [ `cursor-pointer` ] : carsStore.isFilter }"
+      >
         <p
-          @click="sortBy('id')"
+          @click="carsStore.isFilter && sortBy('id')"
           class="pl-8 "
-        >Id &#x21f5;</p>
+        >
+        Id
+        <span v-if="carsStore.isFilter">&#x21f5;</span>
+      </p>
 
         <p
-          @click="sortBy('brand')"
+          @click="carsStore.isFilter && sortBy('brand')"
           class="col-span-2  "
-        >Brand &#x21f5;</p>
+        >
+        Brand
+        <span v-if="carsStore.isFilter">&#x21f5;</span>
+      </p>
 
         <p
-          @click="sortBy('year')"
+          @click="carsStore.isFilter && sortBy('year')"
           class="ml-4 "
-        >Year &#x21f5;</p>
+        >
+        Year
+        <span v-if="carsStore.isFilter">&#x21f5;</span>
+      </p>
 
         <p
-          @click="sortBy('color')"
+          @click="carsStore.isFilter && sortBy('color')"
           class="ml-4  "
-        >Color &#x21f5;</p>
+        >
+        Color
+        <span v-if="carsStore.isFilter">&#x21f5;</span>
+      </p>
 
         <p
-          @click="sortBy('price')"
+          @click="carsStore.isFilter && sortBy('price')"
           class="ml-4 "
-        >Price &#x21f5;</p>
+        >
+        Price
+        <span v-if="carsStore.isFilter">&#x21f5;</span>
+      </p>
 
         <p class=""></p>
         <p class=""></p>
@@ -66,7 +84,6 @@
           src="../assets/heart-off.svg"
           alt="heart-off"
         />
-
       </div>
 
       <ul
@@ -97,7 +114,7 @@
           v-if="carsStore.getFavoriteIds.includes(item.id)"
           @click="addFavorite(item.id)"
           src="../assets/heart-on.svg"
-          class="w-10 h-10 mt-1"
+          class="w-10 h-10 mt-1 cursor-pointer"
           alt="heart-on"
         >
 
@@ -105,10 +122,9 @@
           v-if="!carsStore.getFavoriteIds.includes(item.id)"
           @click="addFavorite(item.id)"
           src="../assets/heart-off.svg"
-          class="w-10 h-10 mt-1"
+          class="w-10 h-10 mt-1 cursor-pointer"
           alt="heart-off"
         >
-
       </ul>
 
       <Pagination
@@ -123,20 +139,12 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useCarsStore } from '../stores/carsStore'
-import Favorites from './Favorites.vue'
 import Pagination from './Pagination.vue'
 import PopupModal from './PopupModal.vue'
 import UpdateModal from './UpdateModal.vue'
 
 const carsStore = useCarsStore()
 
-const rows = ref([])
-const favorites = ref([])
-const idSortAsc = ref(false)
-const brandSortAsc = ref(false)
-const yearSortAsc = ref(false)
-const colorSortAsc = ref(false)
-const priceSortAsc = ref(false)
 const showModal = ref(false)
 const showUpdateModal = ref(false)
 const currentRowId = ref(null)
@@ -150,15 +158,6 @@ const carYear = ref(null)
 const carColor = ref('')
 const carPrice = ref(null)
 const localSortAsc = ref(false)
-
-function setSortFieldsAsc(excludedVariable) {
-  const sortFields = ['id', 'brand', 'year', 'color', 'price']
-  const filteredSortAscVariables = sortFields.map(el => el + 'SortAsc').filter(el => el != excludedVariable)
-
-  filteredSortAscVariables.map(el => {
-    eval(el).value = true
-  })
-}
 
 function sortByFieldType(field, type) {
   if (type === 'numeric') {
@@ -176,7 +175,7 @@ function sortByFieldType(field, type) {
   return carsStore.cars.sort((a, b) => b[field].localeCompare(a[field]))
 }
 
-function localDataSort(field) {
+function sortBy(field) {
   let rowsSorted = []
   if (field === 'id' || field === 'year' || field === 'price') {
     rowsSorted = sortByFieldType(field, 'numeric')
@@ -198,24 +197,6 @@ function fetchRows() {
   }
 
   carsStore.getRows(carsObj)
-}
-
-function sortBy(field) {
-  if (carsStore.isFilter) {
-    return localDataSort(field)
-  }
-
-  rowStart.value = 0
-  sortField.value = field
-
-  let sortVariableName = `${field}SortAsc`
-  const boolValue = eval(sortVariableName).value
-
-  sortOrder.value = ['desc', 'asc'][Number(boolValue)]
-  fetchRows()
-
-  eval(sortVariableName).value = !eval(sortVariableName).value
-  setSortFieldsAsc(sortVariableName)
 }
 
 function getRows(obj) {
@@ -240,9 +221,9 @@ function updateRow(car) {
   showUpdateModal.value = true
   carId.value = car.id
   carBrand.value = car.brand
-  carYear.value = +car.year
+  carYear.value = car.year
   carColor.value = car.color
-  carPrice.value = +car.price
+  carPrice.value = car.price
 }
 
 function shouldUpdate(modifiedCar) {
@@ -254,11 +235,16 @@ function shouldUpdate(modifiedCar) {
       return alert('Brand field is missing')
   }
 
-  if (modifiedCar.brand === carBrand.value
-    && modifiedCar.year == carYear.value
-    && modifiedCar.color === carColor.value
-    && modifiedCar.price == carPrice.value) {
-      return alert('No data has changed')
+  if (!modifiedCar.year) {
+      return alert('Year field is missing')
+ }
+
+  if (!modifiedCar.color) {
+      return alert('Color field is missing')
+  }
+
+  if (!modifiedCar.price) {
+      return alert('Price field is missing')
   }
 
   if (modifiedCar) {

@@ -46,7 +46,6 @@ const props = defineProps({
   brand: String,
   year: Number,
   price: Number
-
 })
 
 const showModal = ref(false)

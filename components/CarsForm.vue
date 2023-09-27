@@ -14,50 +14,54 @@
     </div>
 
     <div class="flex justify-center gap-2 md:gap-7 2xl:my-6 2xl:flex-col 2xl:mr-8 2xl:mt-[5.5rem] 2xl:gap-[23px] 2xl:text-lg">
-
-      <InputBox
+      <SelectBox
+        type="brand"
         :value="brand"
-        :stringInput=true
-        inputPlaceholder="car brand"
-        alt="car-name"
+        alt="car-brand"
         @input="setBrand"
       />
+      <div class="flex 2xl:flex">
+        <InputBox
+          :value="year"
+          :stringInput=false
+          inputPlaceholder="year"
+          :minNumber="1900"
+          :maxNumber="2050"
+          alt="car-year"
+          @input="setYear"
+        />
 
-      <InputBox
-        :value="year"
-        :stringInput=false
-        inputPlaceholder="year"
-        :minNumber="1900"
-        :maxNumber="2050"
-        alt="car-year"
-        @input="setYear"
-      />
+        <IconAndTooltip alt="info-tooltip-year" class="ml-8 2xl:-mt-2">
+          <p>Specified year or newer</p>
+          <p>Sorting by price: ascending</p>
+        </IconAndTooltip>
+      </div>
 
-      <InputBox
+      <SelectBox
+        type="color"
         :value="color"
-        :stringInput=true
-        inputPlaceholder="color"
         alt="car-color"
+        class="-ml-8 2xl:ml-0"
         @input="setColor"
       />
 
-      <InputBox
-        :value="price"
-        :stringInput=false
-        inputPlaceholder="price"
-        :minNumber="100"
-        :maxNumber="100000"
-        :stepNumber="100"
-        alt="car-price"
-        @input="setPrice"
-      />
+      <div class="flex 2xl:flex">
+        <InputBox
+          :value="price"
+          :stringInput=false
+          inputPlaceholder="price"
+          :minNumber="100"
+          :maxNumber="100000"
+          :stepNumber="100"
+          alt="car-price"
+          @input="setPrice"
+        />
 
-      <!-- <button
-        @click="filterItems"
-        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] 2xl:mt-[18px]  disabled:opacity-50"
-        alt="filter-car-button"
-        :disabled="filterButtonDisabled"
-      >Filter</button> -->
+        <IconAndTooltip alt="info-tooltip-price" class="ml-8 2xl:-mt-2">
+          <p>Specified price or lower</p>
+          <p>Sorting by price: ascending</p>
+        </IconAndTooltip>
+      </div>
 
       <button
         @click="addItem"
@@ -67,15 +71,16 @@
 
       <button
         @click="showFavorites"
-        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] 2xl:mt-[18px]  disabled:opacity-50"
-        alt="show-favorite-cars"
+        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] 2xl:mt-[18px] disabled:opacity-50"
+        alt="show-favorite-cars-button"
         :disabled="favoritesButtonDisabled"
       >Favs</button>
 
       <button
         @click="resetValidation"
-        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px]"
+        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] disabled:opacity-50"
         alt="reset-form-button"
+        :disabled="resetButtonDisabled"
       >Reset</button>
 
     </div>
@@ -88,6 +93,8 @@ import { useDebounceFn } from '@vueuse/core'
 import { useCarsStore } from '../stores/carsStore'
 import InputBox from './InputBox.vue'
 import CarsAlert from './CarsAlert.vue';
+import SelectBox from './SelectBox.vue';
+import IconAndTooltip from './IconAndTooltip.vue';
 import { alphanumericAndSingleSpaces } from '../utils/sanitizer'
 
 const carsStore = useCarsStore()
@@ -104,15 +111,15 @@ const favoritesButtonDisabled = computed(() => {
   return !carsStore.favorites.length
 })
 
-const filterButtonDisabled = computed(() => {
-  if(!brand.value && !year.value && !color.value && !price ) {
+const resetButtonDisabled = computed(() => {
+  if(!brand.value && !year.value && !color.value && !price.value ) {
     return true
   }
 })
 
 function setBrand(param) {
   brand.value = param
-  debouncedFn()
+  filterItems()
 }
 
 function setYear(param) {
@@ -122,7 +129,7 @@ function setYear(param) {
 
 function setColor(param) {
   color.value = param
-  debouncedFn()
+  filterItems()
 }
 
 function setPrice(param) {
@@ -137,6 +144,7 @@ function resetValidation() {
   color.value = ''
   price.value = ''
   carsStore.getRows({})
+  carsStore.isFilter = false
 }
 
 function validate() {
@@ -203,5 +211,5 @@ function showFavorites() {
 const debouncedFn = useDebounceFn(() => {
   filterItems()
 }, 300)
-
 </script>
+

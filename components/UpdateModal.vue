@@ -17,7 +17,7 @@
         </div>
 
         <InputBox
-          :value="brand"
+          :value="props.carBrand"
           inputName="Brand"
           :stringInput=true
           inputPlaceholder="car brand"
@@ -26,18 +26,18 @@
         />
 
         <InputBox
-          :value="year"
+          :value="props.carYear"
           inputName="Year"
           :stringInput=false
           inputPlaceholder="year"
-          :minNumber="1900"
-          :maxNumber="2050"
+          :minNumber=1900
+          :maxNumber=2050
           alt="car-year"
           @input="setYear"
         />
 
         <InputBox
-          :value="color"
+          :value="props.carColor"
           inputName="Color"
           :stringInput=true
           inputPlaceholder="color"
@@ -46,13 +46,13 @@
         />
 
         <InputBox
-          :value="price"
+          :value="props.carPrice"
           inputName="Price"
           :stringInput=false
           inputPlaceholder="price"
-          :minNumber="100"
-          :maxNumber="100000"
-          :stepNumber="100"
+          :minNumber=100
+          :maxNumber=100000
+          :stepNumber=100
           alt="car-price"
           @input="setPrice"
         />
@@ -75,10 +75,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import InputBox from './InputBox.vue'
 import CarsAlert from './CarsAlert.vue';
-import { alphanumericAndSingleSpaces } from '../utils/sanitizer'
 
 const emit = defineEmits(['shouldUpdate'])
 
@@ -86,49 +85,34 @@ const props = defineProps({
   message: String,
   carId: Number,
   carBrand: String,
-  carYear: Number,
+  carYear: String,
   carColor: String,
-  carPrice: Number
+  carPrice: String
 })
 
-const newBrand = ref(null)
-const newYear = ref(null)
-const newColor = ref(null)
-const newPrice = ref(null)
+let newBrand = props.carBrand
+let newYear = props.carYear
+let newColor = props.carColor
+let newPrice = props.carPrice
+
 const showAlert = ref(false)
 const alertType = ref('')
 const alertMessage = ref('')
 
-const brand = computed(() => {
-  return props.carBrand
-})
-
-const year = computed(() => {
-  return props.carYear
-})
-
-const color = computed(() => {
-  return props.carColor
-})
-
-const price = computed(() => {
-  return props.carPrice
-})
-
 function setBrand(param) {
-  newBrand.value = param
+  newBrand = param
 }
 
 function setYear(param) {
-  newYear.value = param
+  newYear = param
 }
 
 function setColor(param) {
-  newColor.value = param
+  newColor = param
 }
 
 function setPrice(param) {
-  newPrice.value = param
+  newPrice = Number(param)
 }
 
 function displayAlert(type, message) {
@@ -138,23 +122,26 @@ function displayAlert(type, message) {
 }
 
 function shouldUpdate(shouldUpdate) {
-  if (!shouldUpdate) {
-    emit('shouldUpdate')
-  }
-
   alertMessage.value = ''
 
-  if (!newBrand.value) {
-    alertMessage.value = `Please fill in the 'Brand' field`
+  if (!shouldUpdate) {
+    return emit('shouldUpdate')
   }
-  else if (!newYear.value) {
-    alertMessage.value = `Please fill in the 'Year' field`
+
+  if (!newPrice) {
+    alertMessage.value = `Please fill in the 'Price' field`
   }
-  else if (!newColor.value) {
+
+  if (!newColor) {
     alertMessage.value = `Please fill in the 'Color' field`
   }
-  else if (!newPrice.value) {
-    alertMessage.value = `Please fill in the 'Price' field`
+
+  if (!newYear) {
+    alertMessage.value = `Please fill in the 'Year' field`
+  }
+
+  if (!newBrand) {
+    alertMessage.value = `Please fill in the 'Brand' field`
   }
 
   if (alertMessage.value) {
@@ -163,13 +150,13 @@ function shouldUpdate(shouldUpdate) {
 
   const modifiedCar = {
     id: props.carId,
-    brand: newBrand.value || props.carBrand,
-    year: newYear.value || props.carYear,
-    color: newColor.value || props.carColor,
-    price: newPrice.value || props.carPrice
+    brand: newBrand,
+    year: newYear,
+    color: newColor,
+    price: newPrice
   }
 
-  emit('shouldUpdate', shouldUpdate && modifiedCar)
+  emit('shouldUpdate', modifiedCar)
 }
 
 </script>

@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
-import { fetchRows, removeRow, updateRow, insertRow, filterItems } from '../utils/api'
+import { fetchRows, removeRow, updateRow, insertRow, filterItems, fetchBrandNames } from '../utils/api'
 
 export const useCarsStore = defineStore('carsStore', {
   state: () => ({
     cars: [],
     favorites: [],
+    brandNames: [],
+    colors: [],
     isFilter: false,
   }),
 
@@ -24,6 +26,20 @@ export const useCarsStore = defineStore('carsStore', {
         .then(res => this.cars = res.data)
     },
 
+    getBrandNames() {
+      fetchBrandNames()
+        .then(res => {
+          this.brandNames = res.data
+        })
+    },
+
+    getColors() {
+      fetchColors()
+        .then(res => {
+          this.colors = res.data
+        })
+    },
+
     deleteRow(id, limit) {
       removeRow(id)
         .then(res => fetchRows({ limit }))
@@ -34,7 +50,7 @@ export const useCarsStore = defineStore('carsStore', {
       updateRow(id, car)
         .then(res => fetchRows({ limit }))
         .then(res => this.cars = res.data)
-      },
+    },
 
     addRow(obj) {
       return insertRow(obj)
