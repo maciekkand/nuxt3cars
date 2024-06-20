@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang='ts'>
 const props = defineProps({
   message: {
     type: String,
     default: '',
   },
   carId: {
-    type: Number,
+    type: String,
     required: true,
   },
   carCode: {
@@ -26,7 +26,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['shouldUpdate'])
+const emit = defineEmits(['carUpdate'])
 
 let newCode = props.carCode
 let newBrand = props.carBrand
@@ -37,33 +37,33 @@ const showAlert = ref(false)
 const alertType = ref('')
 const alertMessage = ref('')
 
-function setCode(param) {
-  newCode = param
+function updateField(field: string, value: string) {
+  switch (field) {
+    case 'code':
+      newCode = value
+      break
+    case 'brand':
+      newBrand = value
+      break
+    case 'status':
+      newStatus = value
+      break
+    case 'description':
+      newDescription = value
+  }
 }
 
-function setBrand(param) {
-  newBrand = param
-}
-
-function setStatus(param) {
-  newStatus = param
-}
-
-function setDescription(param) {
-  newDescription = param
-}
-
-function displayAlert(type, message) {
+function displayAlert(type: string, message: string) {
   showAlert.value = true
   alertType.value = type
   alertMessage.value = message
 }
 
-function shouldUpdate(shouldUpdate) {
+function updateCar(shouldUpdate: boolean) {
   alertMessage.value = ''
 
   if (!shouldUpdate)
-    return emit('shouldUpdate')
+    return emit('carUpdate')
 
   if (!newCode)
     alertMessage.value = `Please fill in the 'Code' field`
@@ -85,7 +85,7 @@ function shouldUpdate(shouldUpdate) {
     description: newDescription,
   }
 
-  emit('shouldUpdate', modifiedCar)
+  emit('carUpdate', modifiedCar)
 }
 </script>
 
@@ -114,7 +114,7 @@ function shouldUpdate(shouldUpdate) {
         :value="newCode"
         :string-input="true"
         input-placeholder="code"
-        @input="setCode"
+        @input="updateField('code', $event)"
       />
 
       <label class="-mb-2">Brand</label>
@@ -123,7 +123,7 @@ function shouldUpdate(shouldUpdate) {
         :value="newBrand"
         :string-input="true"
         input-placeholder="brand"
-        @input="setBrand"
+        @input="updateField('brand', $event)"
       />
 
       <label class="-mb-2">Status</label>
@@ -131,7 +131,7 @@ function shouldUpdate(shouldUpdate) {
         type="Status"
         update
         :value="newStatus"
-        @input="setStatus"
+        @input="updateField('status', $event)"
       />
 
       <label class="-mb-2">Description</label>
@@ -139,20 +139,20 @@ function shouldUpdate(shouldUpdate) {
         :value="newDescription"
         :string-input="true"
         input-placeholder="description"
-        @input="setDescription"
+        @input="updateField('description', $event)"
       />
 
       <div class="mt-8">
         <button
           class="px-12 py-2 mr-12 text-white bg-blue-600 rounded"
-          @click="shouldUpdate(true)"
+          @click="updateCar(true)"
         >
           Update
         </button>
 
         <button
           class="px-12 py-2 text-white bg-red-800 rounded"
-          @click="shouldUpdate(false)"
+          @click="updateCar(false)"
         >
           Cancel
         </button>

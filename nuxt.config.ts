@@ -7,8 +7,8 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', "@nuxt/image"],
-  meta: {
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/image'],
+  $meta: {
     title: 'Cars',
   },
   app: {

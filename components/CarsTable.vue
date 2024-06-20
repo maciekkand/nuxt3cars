@@ -1,18 +1,19 @@
-<script setup>
+<script setup lang='ts'>
 import { useCarsStore } from '../stores/carsStore'
+import type { Car, CarsSearch } from '../types/types.ts'
 
 const carsStore = useCarsStore()
 
 const showDeleteModal = ref(false)
 const showUpdateModal = ref(false)
-const currentTruckId = ref(null)
-const carId = ref(null)
+const currentTruckId = ref()
+const carId = ref('')
 const carCode = ref('')
 const carBrand = ref('')
 const carStatus = ref('')
 const carDescription = ref('')
 
-function getCars(obj) {
+function getCars(obj: CarsSearch) {
   const carsObj = {
     start: obj?.start,
     limit: obj?.limit,
@@ -23,12 +24,12 @@ function getCars(obj) {
   carsStore.getCars(carsObj)
 }
 
-function deleteTruck(carId) {
+function deleteTruck(carId: string) {
   showDeleteModal.value = true
   currentTruckId.value = carId
 }
 
-async function shouldDelete(isDelete) {
+async function shouldDelete(isDelete: boolean) {
   if (isDelete) {
     await removeTruck(currentTruckId.value)
     carsStore.getCars({})
@@ -38,34 +39,26 @@ async function shouldDelete(isDelete) {
   showDeleteModal.value = false
 }
 
-function modifyTruck(car) {
+function modifyTruck(car: Car) {
   showUpdateModal.value = true
-  carId.value = car.id
+  carId.value = String(car.id)!
   carCode.value = car.code
   carBrand.value = car.brand
   carStatus.value = car.status
   carDescription.value = car.description
 }
 
-async function shouldUpdate(modifiedCar) {
+async function carUpdate(modifiedCar: Car) {
   if (modifiedCar) {
-    await updateTruck(modifiedCar.id, modifiedCar)
+    await updateTruck(modifiedCar.id!, modifiedCar)
     carsStore.filterCars({ queryString: carsStore.queryString })
   }
 
   showUpdateModal.value = false
 }
 
-function addFavorite(itemId) {
-  if (carsStore.getFavoriteIds.includes(itemId)) {
-    carsStore.favorites = carsStore.favorites.filter((el) => {
-      return el.id !== itemId
-    })
-  }
-  else {
-    const favoredCar = carsStore.cars.filter(el => el.id === itemId)[0]
-    carsStore.favorites.push(favoredCar)
-  }
+function addFavorite(itemId: string) {
+  carsStore.addFavorite(itemId)
 }
 
 function clearFavorites() {
@@ -73,7 +66,7 @@ function clearFavorites() {
 }
 
 onMounted(() => {
-  getCars()
+  getCars({ start: 0, limit: 10, sort: 'id', order: 'asc' })
   carsStore.getBrands()
   carsStore.getStatuses()
 })
@@ -104,7 +97,7 @@ onMounted(() => {
         :car-brand="carBrand"
         :car-status="carStatus"
         :car-description="carDescription"
-        @should-update="shouldUpdate"
+        @car-update="carUpdate"
       />
 
       <div
@@ -204,7 +197,7 @@ onMounted(() => {
             data-test="cars-table-delete"
             class="w-16 h-8 my-4 ml-6 text-sm text-white bg-red-800 rounded-lg"
             alt="delete-button"
-            @click="deleteTruck(item.id)"
+            @click="deleteTruck(item.id!)"
           >
             Del
           </button>
@@ -212,21 +205,21 @@ onMounted(() => {
 
         <li class="col-span-1">
           <NuxtImg
-            v-if="carsStore.getFavoriteIds.includes(item.id)"
+            v-if="carsStore.getFavoriteIds.includes(item.id!)"
             data-test="cars-table-favorite-on"
             src="../public/heart-on.svg"
             class="h-10 mt-3 ml-10 cursor-pointer"
             alt="heart-on"
-            @click="addFavorite(item.id)"
+            @click="addFavorite(item.id!)"
           />
 
           <NuxtImg
-            v-if="!carsStore.getFavoriteIds.includes(item.id)"
+            v-if="!carsStore.getFavoriteIds.includes(item.id!)"
             data-test="cars-table-favorite-off"
             src="../public/heart-off.svg"
             class="h-10 mt-3 ml-10 cursor-pointer"
             alt="heart-off"
-            @click="addFavorite(item.id)"
+            @click="addFavorite(item.id!)"
           />
         </li>
       </ul>

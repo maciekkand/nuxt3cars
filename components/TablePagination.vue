@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang='ts'>
 import { useCarsStore } from '~/stores/carsStore'
 
 const emit = defineEmits(['newPagination'])
@@ -12,7 +12,7 @@ function doPagination() {
   rowStart.value = pageStart.value * rowsNumber.value
 
   if (rowStart.value < 0)
-    rowStart.value = rowStart.value + Number(carsStore.carsCount)
+    rowStart.value = rowStart.value + carsStore.carsCount
 
   emit('newPagination', { start: rowStart.value, limit: rowsNumber.value })
 }

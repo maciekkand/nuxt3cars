@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang='ts'>
 import { useCarsStore } from '../stores/carsStore'
 
 const carsStore = useCarsStore()
@@ -14,7 +14,7 @@ const carsStore = useCarsStore()
   <div class="grid grid-cols-4 gap-4">
     <div v-for="car in carsStore.favorites" :key="car.id">
       <CarCard
-        :id="car.id"
+        :id="car.id!"
         :code="car.code"
         :brand="car.brand"
         :status="car.status"

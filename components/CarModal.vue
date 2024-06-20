@@ -1,25 +1,23 @@
-<script setup>
+<script setup lang='ts'>
 defineProps({
   brand: String,
 })
 
 const emit = defineEmits(['closeModal'])
-const carImage = ref(null)
+const carImageRef = ref()
 
 function closeModal() {
   emit('closeModal')
 }
 
-onMounted(() => {
-  carImage.value.focus()
-})
+onMounted(() => carImageRef.value?.focus())
 </script>
 
 <template>
   <div class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
     <div class="p-8 mt-12 ml-48 bg-white">
       <img
-        ref="carImage"
+        ref="carImageRef"
         :src="`/cars/${brand}.png`"
         alt="car-image"
         class="w-[60rem] h-full"

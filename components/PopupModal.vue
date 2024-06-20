@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang='ts'>
 defineProps({
   message: String,
 })
 
 const emit = defineEmits(['shouldDelete'])
 
-function shouldDelete(isDelete) {
+function shouldDelete(isDelete: boolean) {
   emit('shouldDelete', isDelete)
 }
 </script>

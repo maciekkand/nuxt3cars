@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang='ts'>
 defineProps({
   id: {
-    type: Number,
+    type: String,
     required: true,
   },
   code: {

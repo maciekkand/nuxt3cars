@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang='ts'>
 import { useCarsStore } from '../stores/carsStore'
 
 const props = defineProps({
@@ -39,8 +39,9 @@ const dataSet = computed(() => {
     : availableStatuses
 })
 
-function handleSelection(event) {
-  emit('input', event.target.value)
+function handleSelection(event: Event) {
+  const element = event.target as HTMLButtonElement
+  emit('input', element.value)
 }
 </script>
 

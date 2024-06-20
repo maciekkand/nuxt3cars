@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang='ts'>
 import { useCarsStore } from '../stores/carsStore'
 
 const props = defineProps({
@@ -24,13 +24,15 @@ const finalClass = computed(() => {
     : `${fixedStyle} w-[178px]`
 })
 
-function handleInput(event) {
+function handleInput(event: Event) {
   if (props.inputPlaceholder === 'Code') {
-    carsStore.code = alphanumeric(event.target.value)
+    const element = event.target as HTMLButtonElement
+    carsStore.code = alphanumeric(element.value)
     emit('input', carsStore.code)
   }
   else {
-    carsStore.description = alphanumericAndSingleSpaces(event.target.value)
+    const element = event.target as HTMLButtonElement
+    carsStore.description = alphanumericAndSingleSpaces(element.value)
     emit('input', carsStore.description)
   }
 }

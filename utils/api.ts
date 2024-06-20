@@ -1,3 +1,5 @@
+import { $fetch } from 'ofetch'
+import type { Car, QueryString } from '../types/types.ts'
 import { useCarsStore } from '~/stores/carsStore'
 
 const BASE_URL = 'http://localhost:4000'
@@ -15,15 +17,15 @@ export function fetchCars({ start = 0, limit = 10, sort = 'id', order = 'asc' })
 
   return $fetch(`${BASE_URL}/cars?_start=${start}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
     onResponse(context) {
-      carsStore.carsCount = context.response.headers.get('X-Total-Count')
+      carsStore.carsCount = Number(context.response.headers.get('X-Total-Count'))
     },
   })
 }
 
-export function isTruckCodeUnique(newTruckCode) {
+export function isTruckCodeUnique(newTruckCode: string) {
   return $fetch(`${BASE_URL}/cars`)
     .then((res) => {
-      const allCodes = res.map(el => el.code)
+      const allCodes = res.map((el: Car) => el.code)
       const codeAlreadyExists = allCodes.includes(newTruckCode)
 
       return !codeAlreadyExists
@@ -31,27 +33,33 @@ export function isTruckCodeUnique(newTruckCode) {
     .catch(err => console.log(err))
 }
 
-export function removeTruck(id) {
+export function removeTruck(id: number) {
   return $fetch(`${BASE_URL}/cars/${id}`, {
     method: 'DELETE',
   })
 }
 
-export function insertTruck(obj) {
+export function insertTruck(obj: Car) {
   return $fetch(`${BASE_URL}/cars`, {
     method: 'POST',
     body: obj,
   })
 }
 
-export function updateTruck(id, obj) {
+export function updateTruck(id: string, obj: Car) {
   return $fetch(`${BASE_URL}/cars/${id}`, {
     method: 'PUT',
     body: obj,
   })
 }
 
-export function filterItems(obj) {
+export function filterItems(obj: Car | QueryString) {
+  for (const key in obj) {
+    if (!obj[key]) {
+      delete obj[key]
+    }
+  }
+
   const carsStore = useCarsStore()
   let finalQueryString = ''
 
@@ -59,11 +67,10 @@ export function filterItems(obj) {
     finalQueryString = obj.queryString
   }
   else {
-    const queryString = String(new URLSearchParams(obj))
+    const queryString = String(new URLSearchParams(obj as Record<string, string>))
 
     finalQueryString = queryString
       .replace('code', 'code_like')
-      .replace('brand', 'brand_like')
       .replace('description', 'description_like')
 
     finalQueryString = `${finalQueryString}&_sort=id&_order=ASC`

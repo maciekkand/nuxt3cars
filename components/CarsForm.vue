@@ -1,6 +1,7 @@
-<script setup>
+<script setup lang='ts'>
 import { useDebounceFn } from '@vueuse/core'
 import { useCarsStore } from '../stores/carsStore'
+import type { Car } from '../types/types.ts'
 
 const carsStore = useCarsStore()
 
@@ -17,37 +18,29 @@ const favoritesButtonDisabled = computed(() => {
 })
 
 const addButtonDisabled = computed(() => {
-  if (code.value && brand.value && status.value)
-    return false
-
-  return true
+  const isFieldsFilled = code.value && brand.value && status.value
+  return !isFieldsFilled
 })
 
 const debouncedFilterItems = useDebounceFn(() => {
   filterItems()
 }, 300)
 
-function setCode() {
-  code.value = carsStore.code
-  debouncedFilterItems()
-}
+function updateBrandOrStatus(field: 'brand' | 'status', value: string) {
+  const fields = { brand, status }
+  fields[field].value = value
 
-function setBrand(brandValue) {
-  brand.value = brandValue
   filterItems()
 }
 
-function setStatus(statusValue) {
-  status.value = statusValue
-  filterItems()
-}
+function updateCodeOrDescription(field: 'code' | 'description', value: string) {
+  const fields = { code, description }
+  fields[field].value = value
 
-function setDescription() {
-  description.value = carsStore.description
   debouncedFilterItems()
 }
 
-function resetValidation(idSortOrder) {
+function resetValidation(idSortOrder: 'asc' | 'desc') {
   showAlert.value = false
   code.value = ''
   brand.value = ''
@@ -56,7 +49,7 @@ function resetValidation(idSortOrder) {
   carsStore.getCars({ order: idSortOrder })
 }
 
-function displayAlert(type, message) {
+function displayAlert(type: string, message: string) {
   showAlert.value = true
   alertType.value = type
   alertMessage.value = message
@@ -85,7 +78,7 @@ async function addItem() {
 }
 
 function filterItems() {
-  const carObj = {}
+  const carObj: Car = { id: '', code: '', brand: '', status: '', description: '' }
   code.value && (carObj.code = code.value)
   brand.value && (carObj.brand = brand.value)
   status.value && (carObj.status = status.value)
@@ -123,21 +116,21 @@ function showFavorites() {
         data-test="car-code"
         input-placeholder="Code"
         alt="car-price"
-        @input="setCode"
+        @input="updateCodeOrDescription('code', $event)"
       />
 
       <SelectBox
         type="Brand"
         data-test="car-brand"
         :value="brand"
-        @input="setBrand"
+        @input="updateBrandOrStatus('brand', $event)"
       />
 
       <SelectBox
         type="Status"
         data-test="car-status"
         :value="status"
-        @input="setStatus"
+        @input="updateBrandOrStatus('status', $event)"
       />
 
       <InputBox
@@ -146,7 +139,7 @@ function showFavorites() {
         data-test="car-description"
         input-placeholder="Description"
         alt="car-price"
-        @input="setDescription"
+        @input="updateCodeOrDescription('description', $event)"
       />
 
       <button
@@ -171,7 +164,7 @@ function showFavorites() {
 
       <button
         data-test="car-reset-button"
-        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] disabled:opacity-50"
+        class="w-24 h-[42px] text-xl text-white bg-blue-600 rounded-lg mt-[4px] 2xl:mt-[18px] disabled:opacity-50"
         alt="reset-form-button"
         @click="resetValidation('asc')"
       >

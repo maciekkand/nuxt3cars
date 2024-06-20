@@ -25,9 +25,9 @@
   "cars": [
     {
       "id": 1,
-      "code": "ABC1234",
-      "brand": "Chrysler",
-      "status": "Loading",
+      "code": "ABC123",
+      "brand": "Audi",
+      "status": "Out Of Service",
       "description": "Implemented maximized protocol"
     },
     {
@@ -7001,13 +7001,6 @@
       "brand": "Hyundai",
       "status": "To Job",
       "description": ""
-    },
-    {
-      "id": 1007,
-      "code": "ABC1234",
-      "brand": "BMW",
-      "status": "Loading",
-      "description": "not bad"
     }
   ]
 }
