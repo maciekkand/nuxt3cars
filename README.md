@@ -5,7 +5,7 @@ Simple CRUD (adding, browsing, updating, deleting) app for cars. Functionality a
 * git clone [repo]
 * cd [repo]
 * npm install (--legacy-peer-deps)
-* npx json-server --watch db.json --port 4000
+* npx json-server --watch db.json --port 4000  // json-server@0.17.4 or lower 
 * npm run dev
 * browser:  http://localhost:3000/
 
