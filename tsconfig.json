@@ -8,5 +8,6 @@
     "moduleResolution": "Node",
     "strict": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["node_modules"]
 }

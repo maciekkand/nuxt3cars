@@ -1,8 +1,5 @@
 <script setup lang='ts'>
-interface AlertProps {
-  type: string
-  message: string
-}
+import type { AlertProps } from '@/types/types'
 
 const { type, message } = defineProps<AlertProps>()
 

@@ -1,4 +1,5 @@
 import { $fetch } from 'ofetch'
+import type { Car, QueryString } from '@/types/types'
 import { useCarsStore } from '~/stores/carsStore'
 
 const BASE_URL = 'http://localhost:4000'
