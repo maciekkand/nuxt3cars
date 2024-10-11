@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 test('1. assert start number of cars = 10', async ({ page }) => {
   await page.waitForTimeout(500)
   const carsRowCount = await page.locator('[data-test="cars-table-row"]').count()
-  await expect(carsRowCount).toBe(10)
+  expect(carsRowCount).toBe(10)
 })
 
 test('2. assert that after setting brand filter to "Audi" cars are "Audi" ', async ({ page }) => {

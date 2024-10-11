@@ -2,7 +2,7 @@
 import { useCarsStore } from '~/stores/carsStore'
 
 const emit = defineEmits<{
-  (e: 'newPagination', pagination: { page: number, itemsPerPage: number }): void
+  (e: 'newPagination', pagination: { start: number, limit: number }): void
 }>()
 
 const carsStore = useCarsStore()

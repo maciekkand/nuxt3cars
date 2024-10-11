@@ -1,11 +1,6 @@
 <script setup lang='ts'>
-import { useCarsStore } from '../stores/carsStore'
-
-interface SelectProps {
-  type: string
-  value: string
-  update?: boolean
-}
+import { useCarsStore } from '@/stores/carsStore'
+import type { SelectProps } from '@/types/types'
 
 const { type, value, update } = defineProps<SelectProps>()
 

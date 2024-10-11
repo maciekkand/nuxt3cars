@@ -1,12 +1,10 @@
 <script setup lang='ts'>
-interface PopupProps {
-  message: string
-}
+import type { PopupProps } from '@/types/types'
 
 const { message } = defineProps<PopupProps>()
 
 const emit = defineEmits<{
-  (e: 'shouldDelete'): void
+  (e: 'shouldDelete', isDelete: boolean): void
 }>()
 
 function shouldDelete(isDelete: boolean) {

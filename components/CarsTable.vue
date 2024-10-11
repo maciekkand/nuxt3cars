@@ -1,18 +1,19 @@
 <script setup lang='ts'>
-import { useCarsStore } from '../stores/carsStore'
+import type { Car, CarsSearch } from '@/types/types'
+import { useCarsStore } from '@/stores/carsStore'
 
 const carsStore = useCarsStore()
 
 const showDeleteModal = ref(false)
 const showUpdateModal = ref(false)
 const currentCarId = ref()
-const carId = ref('')
+const carId = ref()
 const carCode = ref('')
 const carBrand = ref('')
 const carStatus = ref('')
 const carDescription = ref('')
 
-function getCars(obj: CarsSearch) {
+function getCars(obj: CarsSearch): void {
   const carsObj: {
     start?: number
     limit?: number
@@ -35,7 +36,7 @@ function getCars(obj: CarsSearch) {
   carsStore.getCars(carsObj)
 }
 
-function deleteCar(carId: string) {
+function deleteCar(carId: number) {
   showDeleteModal.value = true
   currentCarId.value = carId
 }
@@ -86,7 +87,9 @@ onMounted(() => {
 <template>
   <div class="relative min-h-[670px] w-full">
     <header>
-      <h1 class="hidden text-3xl font-semibold 2xl:flex 2xl:justify-center 2xl:my-4">Cars</h1>
+      <h1 class="hidden text-3xl font-semibold 2xl:flex 2xl:justify-center 2xl:my-4">
+        Cars
+      </h1>
     </header>
 
     <div>
@@ -110,12 +113,21 @@ onMounted(() => {
       />
 
       <div class="leading-[3rem] grid w-full grid-cols-10 mt-12 text-xl bg-neutral-300">
-
-        <p class="pl-8">#</p>
-        <p class="-ml-8">Code</p>
-        <p class="-ml-10">Brand</p>
-        <p class="-ml-5">Status</p>
-        <p class="col-span-4 ml-4">Description</p>
+        <p class="pl-8">
+          #
+        </p>
+        <p class="-ml-8">
+          Code
+        </p>
+        <p class="-ml-10">
+          Brand
+        </p>
+        <p class="-ml-5">
+          Status
+        </p>
+        <p class="col-span-4 ml-4">
+          Description
+        </p>
         <p class="" />
 
         <NuxtImg
@@ -140,14 +152,12 @@ onMounted(() => {
         class="grid w-full grid-cols-11 text-lg odd:bg-neutral-300"
         alt="cars-table"
       >
-
         <CarRow
-          :item
+          :item="item"
           @modify-car="modifyCar"
           @delete-car="deleteCar"
           @add-favorite="addFavorite"
         />
-
       </ul>
     </div>
 

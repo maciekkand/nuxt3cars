@@ -1,10 +1,6 @@
 <script setup lang='ts'>
-import { useCarsStore } from '../stores/carsStore'
-
-interface InputProps {
-  inputPlaceholder?: string
-  value?: string
-}
+import { useCarsStore } from '@/stores/carsStore'
+import type { InputProps } from '@/types/types'
 
 const { inputPlaceholder, value } = defineProps<InputProps>()
 

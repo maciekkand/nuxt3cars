@@ -1,9 +1,6 @@
 <script setup lang='ts'>
-import { useCarsStore } from '../stores/carsStore'
-
-interface RowProps {
-  item: Car
-}
+import { useCarsStore } from '@/stores/carsStore'
+import type { Car, RowProps } from '@/types/types'
 
 const { item } = defineProps<RowProps>()
 

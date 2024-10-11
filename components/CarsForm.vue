@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { useDebounceFn } from '@vueuse/core'
-import { useCarsStore } from '../stores/carsStore'
+import type { Car } from '@/types/types'
+import { useCarsStore } from '@/stores/carsStore'
 
 const carsStore = useCarsStore()
 

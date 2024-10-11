@@ -1,7 +1,5 @@
 <script setup lang='ts'>
-interface BrandProps {
-  brand: string
-}
+import type { BrandProps } from '@/types/types'
 
 const { brand } = defineProps<BrandProps>()
 

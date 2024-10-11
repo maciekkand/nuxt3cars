@@ -1,11 +1,5 @@
 <script setup lang='ts'>
-interface CardProps {
-  id: string
-  code: string
-  brand: string
-  status: string
-  description?: string
-}
+import type { CardProps } from '@/types/types'
 
 const {
   id,

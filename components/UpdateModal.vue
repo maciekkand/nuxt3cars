@@ -1,12 +1,5 @@
 <script setup lang='ts'>
-interface UpdateProps {
-  message?: string
-  carId: string
-  carCode: string
-  carBrand: string
-  carStatus: string
-  carDescription?: string
-}
+import type { UpdateProps } from '@/types/types'
 
 const {
   message = '',
